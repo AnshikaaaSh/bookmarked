@@ -1,0 +1,17 @@
+.env
+.claude/
+.chroma/
+logs/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+
+# Your library is personal — keep the actual content out of git,
+# but keep the folder structure and the samples.
+data/books/*.md
+data/texts/*
+data/articles/*
+!data/**/.gitkeep
+!data/**/*.sample.md

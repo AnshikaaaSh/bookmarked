@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bookmarked</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <div class="wordmark">book<span>marked</span></div>
+    <nav class="tabs" id="tabsNav">
+      <span class="tab-indicator" id="tabIndicator"></span>
+      <button class="active" data-view="ask">Ask</button>
+      <button data-view="recommend">Recommend</button>
+      <button data-view="write">Write</button>
+      <button data-view="graph">Graph</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ASK VIEW -->
+    <section class="view active" id="view-ask">
+      <p class="lede">Ask anything across what you've read. Answers are grounded in your own library, with the source noted underneath.</p>
+      <div class="narrow" id="askThread"></div>
+      <div class="askbar">
+        <input id="askInput" type="text" placeholder="Ask your library something…" autocomplete="off">
+        <button id="askButton">Ask</button>
+      </div>
+    </section>
+
+    <!-- RECOMMEND VIEW -->
+    <section class="view" id="view-recommend">
+      <p class="lede">Name a book you liked — recommendations come with a real reason, not just a similarity score.</p>
+      <div class="findbar">
+        <input id="likedInput" type="text" placeholder="Because I liked…" value="Klara and the Sun" autocomplete="off">
+        <button id="recButton">Find recommendations</button>
+      </div>
+      <div id="recStatus"></div>
+      <div class="covergrid" id="shelf"></div>
+      <div class="reason" id="reasonBox">
+        <h3 id="reasonTitle"></h3>
+        <p id="reasonText"></p>
+      </div>
+    </section>
+
+    <!-- WRITE VIEW -->
+    <section class="view" id="view-write">
+      <p class="lede">Give it a topic — it drafts an outline grounded in your library and current articles, ready for your next post.</p>
+      <div class="topicbar">
+        <input id="topicInput" type="text" placeholder="Topic for your next post…" value="Why agentic AI needs guardrails" autocomplete="off">
+        <button id="outlineButton">Draft outline</button>
+      </div>
+      <div id="writeStatus"></div>
+      <div class="manuscript" id="manuscript">
+        <h2 id="mTitle"></h2>
+        <div class="rule"></div>
+        <ol id="mOutline"></ol>
+        <div class="footnotes" id="mFootnotes"></div>
+      </div>
+    </section>
+
+    <!-- GRAPH VIEW -->
+    <section class="view" id="view-graph">
+      <p class="lede">The character graph only shows what's been introduced so far — drag the ribbon to your current chapter.</p>
+      <div class="bookpicker">
+        <label for="graphBook">Book</label>
+        <select id="graphBook"></select>
+      </div>
+      <div id="graphStatus"></div>
+      <div class="graphpanel">
+        <svg id="graphSvg" viewBox="0 0 680 340"></svg>
+      </div>
+      <div class="ribbon-wrap" id="ribbonWrap">
+        <div class="cap">
+          <span>Chapter 1</span>
+          <span id="chapLabel">Chapter 1</span>
+          <span id="chapMax">Chapter 1</span>
+        </div>
+        <input type="range" id="progress" min="1" max="1" value="1">
+        <p class="ribbon-note" id="hiddenNote"></p>
+      </div>
+    </section>
+
+    <footer class="hint" id="footerHint">
+      Ask runs against your real library. Recommend and Write return demo data until
+      build-order steps 3 and 6 land — anything placeholder is badged.
+    </footer>
+  </main>
+</div>
+
+<script type="module" src="./js/app.js"></script>
+</body>
+</html>

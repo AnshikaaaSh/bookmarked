@@ -1,0 +1,16 @@
+{
+  "nodes": [
+    { "id": "amara", "label": "Amara", "introduced_at": 1, "main": true },
+    { "id": "mira", "label": "Mira", "introduced_at": 1, "main": false },
+    { "id": "dev", "label": "Dev", "introduced_at": 3, "main": false },
+    { "id": "ravi", "label": "Ravi", "introduced_at": 6, "main": false },
+    { "id": "the-tenant", "label": "The previous tenant", "introduced_at": 11, "main": false }
+  ],
+  "edges": [
+    { "source": "amara", "target": "mira", "label": "neighbour", "introduced_at": 1 },
+    { "source": "amara", "target": "mira", "label": "mentor", "introduced_at": 2 },
+    { "source": "amara", "target": "dev", "label": "childhood friend", "introduced_at": 3 },
+    { "source": "amara", "target": "ravi", "label": "rival", "introduced_at": 6 },
+    { "source": "mira", "target": "the-tenant", "label": "knew them", "introduced_at": 11 }
+  ]
+}

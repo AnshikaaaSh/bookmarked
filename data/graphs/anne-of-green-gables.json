@@ -1,0 +1,162 @@
+{
+  "nodes": [
+    {
+      "id": "rachel-lynde",
+      "label": "Mrs. Rachel Lynde",
+      "introduced_at": 1,
+      "main": false
+    },
+    {
+      "id": "matthew-cuthbert",
+      "label": "Matthew Cuthbert",
+      "introduced_at": 1,
+      "main": false
+    },
+    {
+      "id": "marilla-cuthbert",
+      "label": "Marilla Cuthbert",
+      "introduced_at": 1,
+      "main": false
+    },
+    {
+      "id": "anne-shirley",
+      "label": "Anne Shirley",
+      "introduced_at": 2,
+      "main": true
+    },
+    {
+      "id": "diana-barry",
+      "label": "Diana Barry",
+      "introduced_at": 2,
+      "main": false
+    },
+    {
+      "id": "mrs-barry",
+      "label": "Mrs. Barry",
+      "introduced_at": 6,
+      "main": false
+    },
+    {
+      "id": "gilbert-blythe",
+      "label": "Gilbert Blythe",
+      "introduced_at": 15,
+      "main": false
+    },
+    {
+      "id": "mr-phillips",
+      "label": "Mr. Phillips",
+      "introduced_at": 15,
+      "main": false
+    },
+    {
+      "id": "prissy-andrews",
+      "label": "Prissy Andrews",
+      "introduced_at": 15,
+      "main": false
+    },
+    {
+      "id": "miss-josephine-barry",
+      "label": "Miss Josephine Barry",
+      "introduced_at": 19,
+      "main": false
+    },
+    {
+      "id": "minnie-may",
+      "label": "Minnie May",
+      "introduced_at": 18,
+      "main": false
+    },
+    {
+      "id": "mr-allan",
+      "label": "Mr. Allan",
+      "introduced_at": 21,
+      "main": false
+    },
+    {
+      "id": "mrs-allan",
+      "label": "Mrs. Allan",
+      "introduced_at": 21,
+      "main": false
+    },
+    {
+      "id": "miss-stacy",
+      "label": "Miss Stacy",
+      "introduced_at": 22,
+      "main": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "rachel-lynde",
+      "target": "marilla-cuthbert",
+      "label": "friend",
+      "introduced_at": 1
+    },
+    {
+      "source": "matthew-cuthbert",
+      "target": "marilla-cuthbert",
+      "label": "sibling",
+      "introduced_at": 1
+    },
+    {
+      "source": "matthew-cuthbert",
+      "target": "anne-shirley",
+      "label": "adopted daughter",
+      "introduced_at": 2
+    },
+    {
+      "source": "marilla-cuthbert",
+      "target": "anne-shirley",
+      "label": "adopted daughter",
+      "introduced_at": 3
+    },
+    {
+      "source": "anne-shirley",
+      "target": "diana-barry",
+      "label": "bosom friend",
+      "introduced_at": 12
+    },
+    {
+      "source": "anne-shirley",
+      "target": "gilbert-blythe",
+      "label": "rival / schoolmate",
+      "introduced_at": 15
+    },
+    {
+      "source": "anne-shirley",
+      "target": "miss-stacy",
+      "label": "teacher",
+      "introduced_at": 22
+    },
+    {
+      "source": "diana-barry",
+      "target": "mrs-barry",
+      "label": "daughter",
+      "introduced_at": 6
+    },
+    {
+      "source": "diana-barry",
+      "target": "miss-josephine-barry",
+      "label": "great-aunt",
+      "introduced_at": 19
+    },
+    {
+      "source": "diana-barry",
+      "target": "minnie-may",
+      "label": "sister",
+      "introduced_at": 18
+    },
+    {
+      "source": "mr-phillips",
+      "target": "prissy-andrews",
+      "label": "teacher and student / suitor",
+      "introduced_at": 15
+    },
+    {
+      "source": "mr-allan",
+      "target": "mrs-allan",
+      "label": "husband",
+      "introduced_at": 21
+    }
+  ]
+}

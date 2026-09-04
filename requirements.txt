@@ -1,0 +1,27 @@
+# Core
+google-genai>=2.0.0        # default provider (free tier)
+anthropic>=0.125.0         # optional alternative provider
+fastapi>=0.116.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.9.0
+python-dotenv>=1.0.0
+
+# Retrieval + graph
+chromadb>=0.5.20
+networkx>=3.2
+
+# Agent orchestration (build-order step 3)
+langgraph>=1.0.0
+langchain>=1.0.0                # create_agent lives here, not langgraph.prebuilt (deprecated there)
+langchain-core>=1.0.0
+langchain-google-genai>=4.0.0   # LangChain chat model wrapper for the default provider
+langchain-anthropic>=1.0.0      # for the optional anthropic provider
+
+# Web search fallback (build-order step 3)
+httpx>=0.27.0
+
+# PDF import (scripts/import_pdf.py)
+pypdf>=6.0.0
+
+# Article ingestion (optional: only needed for `scripts/fetch_article.py`)
+trafilatura>=1.12.0

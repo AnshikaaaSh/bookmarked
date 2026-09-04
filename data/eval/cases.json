@@ -1,0 +1,107 @@
+[
+  {
+    "id": "gatsby-narrator",
+    "question": "Who narrates The Great Gatsby?",
+    "source_id": "the-great-gatsby",
+    "expect_keywords": ["Nick", "Carraway"]
+  },
+  {
+    "id": "gatsby-tom-daisy",
+    "question": "Who is Daisy married to?",
+    "source_id": "the-great-gatsby",
+    "expect_keywords": ["Tom"]
+  },
+  {
+    "id": "gatsby-myrtle-intro",
+    "question": "Who is Myrtle Wilson and where is she first introduced?",
+    "source_id": "the-great-gatsby",
+    "expect_keywords": ["Myrtle"],
+    "expect_max_citation_position": 3
+  },
+  {
+    "id": "gatsby-spoiler-bound",
+    "question": "What does Nick think of Gatsby by the end of the novel?",
+    "source_id": "the-great-gatsby",
+    "position": 3,
+    "expect_no_keywords": ["Gatz", "funeral", "shot", "pool"],
+    "expect_max_citation_position": 3,
+    "expect_web": false,
+    "note": "Spoiler-safety regression: scoped to ch.3, must not leak Gatsby's death (ch.8-9) or funeral (ch.9)."
+  },
+  {
+    "id": "anne-adoption",
+    "question": "Who adopts Anne, and why did they originally want a different kind of child?",
+    "source_id": "anne-of-green-gables",
+    "expect_keywords": ["Matthew", "Marilla"]
+  },
+  {
+    "id": "anne-diana",
+    "question": "Who is Anne's best friend?",
+    "source_id": "anne-of-green-gables",
+    "expect_keywords": ["Diana"]
+  },
+  {
+    "id": "anne-gilbert-spoiler-bound",
+    "question": "Does Anne have a rival or love interest at school?",
+    "source_id": "anne-of-green-gables",
+    "position": 10,
+    "expect_no_keywords": ["Gilbert"],
+    "expect_max_citation_position": 10,
+    "note": "Gilbert isn't introduced until ch.15. Phrased without his name so any appearance of it in the answer is a genuine signal of leaked info, not the model echoing the question."
+  },
+  {
+    "id": "crime-punishment-protagonist",
+    "question": "Who is the main character of Crime and Punishment?",
+    "source_id": "crime-and-punishment-barnes",
+    "expect_keywords": ["Raskolnikov"]
+  },
+  {
+    "id": "anne-false-premise",
+    "question": "Does Anne have a brother who dies in a house fire earlier in the story?",
+    "source_id": "anne-of-green-gables",
+    "expect_no_keywords": ["yes, her brother", "her brother died"],
+    "note": "Fabricated plot detail — Anne has no brother in the book. Tests whether the agent confirms a false premise instead of correctly saying it isn't there."
+  },
+  {
+    "id": "web-fallback-current-events",
+    "question": "What are current trends in agentic AI in 2026?",
+    "expect_web": true,
+    "expect_keywords": ["agent"],
+    "note": "No book in the library covers this — the agent must decide on its own to search the web."
+  },
+  {
+    "id": "web-fallback-no-position-leak",
+    "question": "What is the plot of the movie Dune Part Two?",
+    "expect_keywords": ["Dune"],
+    "note": "General-knowledge web question with no book scoping at all."
+  },
+  {
+    "id": "spoiler-web-must-not-fire",
+    "question": "What happens at the very end of Crime and Punishment?",
+    "source_id": "crime-and-punishment-barnes",
+    "position": 5,
+    "expect_web": false,
+    "expect_max_citation_position": 5,
+    "note": "Even though this question is unanswerable from ch.1-5 alone, the agent must NOT reach for the web to fill the gap — it must say it doesn't know."
+  },
+  {
+    "id": "society-page-scoped",
+    "question": "What is this book about?",
+    "source_id": "the-society",
+    "expect_keywords": []
+  },
+  {
+    "id": "island-house-page-scoped-spoiler",
+    "question": "How does this book end?",
+    "source_id": "the-island-house",
+    "position": 20,
+    "expect_max_citation_position": 20,
+    "note": "Page-scoped book — verify the position bound works on page positions, not just chapters."
+  },
+  {
+    "id": "cross-book-connection",
+    "question": "Is there a character in my library who is an orphan taken in by someone who didn't originally want them?",
+    "expect_keywords": ["Anne"],
+    "note": "Tests whether the agent can find a cross-cutting theme via search_library without a source_id scope."
+  }
+]

@@ -1,0 +1,198 @@
+{
+  "nodes": [
+    {
+      "id": "nick-carraway",
+      "label": "Nick Carraway",
+      "introduced_at": 1,
+      "main": true
+    },
+    {
+      "id": "jay-gatsby",
+      "label": "Jay Gatsby",
+      "introduced_at": 1,
+      "main": true
+    },
+    {
+      "id": "tom-buchanan",
+      "label": "Tom Buchanan",
+      "introduced_at": 1,
+      "main": false
+    },
+    {
+      "id": "daisy-buchanan",
+      "label": "Daisy Buchanan",
+      "introduced_at": 1,
+      "main": false
+    },
+    {
+      "id": "jordan-baker",
+      "label": "Jordan Baker",
+      "introduced_at": 1,
+      "main": false
+    },
+    {
+      "id": "george-wilson",
+      "label": "George Wilson",
+      "introduced_at": 2,
+      "main": false
+    },
+    {
+      "id": "myrtle-wilson",
+      "label": "Myrtle Wilson",
+      "introduced_at": 2,
+      "main": false
+    },
+    {
+      "id": "catherine",
+      "label": "Catherine",
+      "introduced_at": 2,
+      "main": false
+    },
+    {
+      "id": "mr-mckee",
+      "label": "Mr McKee",
+      "introduced_at": 2,
+      "main": false
+    },
+    {
+      "id": "mrs-mckee",
+      "label": "Mrs McKee",
+      "introduced_at": 2,
+      "main": false
+    },
+    {
+      "id": "owl-eyes",
+      "label": "Owl Eyes",
+      "introduced_at": 3,
+      "main": false
+    },
+    {
+      "id": "meyer-wolfshiem",
+      "label": "Meyer Wolfshiem",
+      "introduced_at": 4,
+      "main": false
+    },
+    {
+      "id": "dan-cody",
+      "label": "Dan Cody",
+      "introduced_at": 5,
+      "main": false
+    },
+    {
+      "id": "klipspringer",
+      "label": "Klipspringer",
+      "introduced_at": 5,
+      "main": false
+    },
+    {
+      "id": "pammy-buchanan",
+      "label": "Pammy Buchanan",
+      "introduced_at": 7,
+      "main": false
+    },
+    {
+      "id": "michaelis",
+      "label": "Michaelis",
+      "introduced_at": 7,
+      "main": false
+    },
+    {
+      "id": "henry-c-gatz",
+      "label": "Henry C. Gatz",
+      "introduced_at": 9,
+      "main": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "nick-carraway",
+      "target": "daisy-buchanan",
+      "label": "second cousin once removed",
+      "introduced_at": 1
+    },
+    {
+      "source": "nick-carraway",
+      "target": "tom-buchanan",
+      "label": "college acquaintance",
+      "introduced_at": 1
+    },
+    {
+      "source": "nick-carraway",
+      "target": "jay-gatsby",
+      "label": "neighbor / acquaintance",
+      "introduced_at": 1
+    },
+    {
+      "source": "nick-carraway",
+      "target": "jordan-baker",
+      "label": "acquaintance",
+      "introduced_at": 1
+    },
+    {
+      "source": "jay-gatsby",
+      "target": "daisy-buchanan",
+      "label": "former romantic interest",
+      "introduced_at": 4
+    },
+    {
+      "source": "jay-gatsby",
+      "target": "meyer-wolfshiem",
+      "label": "business associate",
+      "introduced_at": 4
+    },
+    {
+      "source": "jay-gatsby",
+      "target": "dan-cody",
+      "label": "mentor / former employer",
+      "introduced_at": 5
+    },
+    {
+      "source": "jay-gatsby",
+      "target": "henry-c-gatz",
+      "label": "father",
+      "introduced_at": 9
+    },
+    {
+      "source": "tom-buchanan",
+      "target": "daisy-buchanan",
+      "label": "husband",
+      "introduced_at": 1
+    },
+    {
+      "source": "tom-buchanan",
+      "target": "myrtle-wilson",
+      "label": "mistress",
+      "introduced_at": 2
+    },
+    {
+      "source": "tom-buchanan",
+      "target": "pammy-buchanan",
+      "label": "father",
+      "introduced_at": 7
+    },
+    {
+      "source": "daisy-buchanan",
+      "target": "pammy-buchanan",
+      "label": "mother",
+      "introduced_at": 7
+    },
+    {
+      "source": "george-wilson",
+      "target": "myrtle-wilson",
+      "label": "husband",
+      "introduced_at": 2
+    },
+    {
+      "source": "myrtle-wilson",
+      "target": "catherine",
+      "label": "sister",
+      "introduced_at": 2
+    },
+    {
+      "source": "mr-mckee",
+      "target": "mrs-mckee",
+      "label": "husband",
+      "introduced_at": 2
+    }
+  ]
+}
