@@ -1,3 +1,13 @@
+---
+title: bookmarked
+emoji: 📚
+colorFrom: orange
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # bookmarked
 
 A personal reading companion: ask questions across everything you've read, get

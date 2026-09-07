@@ -1,0 +1,16 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.git/
+.chroma/
+logs/
+data/cache/
+data/books/*.md
+data/texts/*
+data/articles/*
+!data/**/.gitkeep
+!data/**/*.sample.md
+.env
+.DS_Store
+.claude/

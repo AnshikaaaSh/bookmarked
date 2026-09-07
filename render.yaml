@@ -1,0 +1,17 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Connect this repo on Render's dashboard ("New +" -> "Blueprint") and it
+# reads this file automatically; no manual service config needed beyond
+# pasting the GEMINI_API_KEY secret (sync:false below means Render prompts
+# for it rather than expecting it committed here).
+
+services:
+  - type: web
+    name: bookmarked
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: LLM_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false
