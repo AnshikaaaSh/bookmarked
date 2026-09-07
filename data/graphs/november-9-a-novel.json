@@ -1,0 +1,126 @@
+{
+  "nodes": [
+    {
+      "id": "fallon",
+      "label": "Fallon O'Neil",
+      "introduced_at": 11,
+      "main": true
+    },
+    {
+      "id": "ben",
+      "label": "Benton James Kessler",
+      "introduced_at": 10,
+      "main": true
+    },
+    {
+      "id": "donovan",
+      "label": "Donovan O'Neil",
+      "introduced_at": 12,
+      "main": false
+    },
+    {
+      "id": "amber",
+      "label": "Amber",
+      "introduced_at": 19,
+      "main": false
+    },
+    {
+      "id": "kyle",
+      "label": "Kyle Kessler",
+      "introduced_at": 54,
+      "main": false
+    },
+    {
+      "id": "jordyn",
+      "label": "Jordyn",
+      "introduced_at": 54,
+      "main": false
+    },
+    {
+      "id": "ian",
+      "label": "Ian Kessler",
+      "introduced_at": 101,
+      "main": false
+    },
+    {
+      "id": "tate",
+      "label": "Tate",
+      "introduced_at": 126,
+      "main": false
+    },
+    {
+      "id": "miles",
+      "label": "Miles",
+      "introduced_at": 126,
+      "main": false
+    },
+    {
+      "id": "oliver",
+      "label": "Oliver",
+      "introduced_at": 157,
+      "main": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "fallon",
+      "target": "ben",
+      "label": "romantic partner",
+      "introduced_at": 21
+    },
+    {
+      "source": "fallon",
+      "target": "donovan",
+      "label": "father",
+      "introduced_at": 12
+    },
+    {
+      "source": "fallon",
+      "target": "amber",
+      "label": "roommate and best friend",
+      "introduced_at": 19
+    },
+    {
+      "source": "ben",
+      "target": "kyle",
+      "label": "brother",
+      "introduced_at": 54
+    },
+    {
+      "source": "ben",
+      "target": "ian",
+      "label": "brother",
+      "introduced_at": 101
+    },
+    {
+      "source": "ben",
+      "target": "jordyn",
+      "label": "sister-in-law and former romantic partner",
+      "introduced_at": 98
+    },
+    {
+      "source": "kyle",
+      "target": "jordyn",
+      "label": "spouse",
+      "introduced_at": 43
+    },
+    {
+      "source": "kyle",
+      "target": "oliver",
+      "label": "father",
+      "introduced_at": 157
+    },
+    {
+      "source": "jordyn",
+      "target": "oliver",
+      "label": "mother",
+      "introduced_at": 126
+    },
+    {
+      "source": "tate",
+      "target": "miles",
+      "label": "romantic partner",
+      "introduced_at": 126
+    }
+  ]
+}

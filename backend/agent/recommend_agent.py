@@ -15,7 +15,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from langchain_core.exceptions import ModelError
 from pydantic import BaseModel, Field
 
 from ..llm.providers import LLMConfigError, LLMUnavailableError
@@ -81,19 +80,26 @@ def recommend(liked: str) -> RecommendResult:
     tools, _registry = build_tools(source_id=None, position=None)
 
     from langchain.agents import create_agent
+    from langchain.agents.structured_output import ToolStrategy
 
     with Timer() as timer:
         try:
             model = get_chat_model()
+            # ToolStrategy forces structured output via a tool call rather than
+            # the provider's native JSON mode — see write_agent.py's identical
+            # comment for why: Groq hard-rejects combining tools with its
+            # native JSON mode, which auto-selection ran into here too.
             agent = create_agent(
-                model, tools=tools, system_prompt=SYSTEM_PROMPT, response_format=RecommendationSet
+                model, tools=tools, system_prompt=SYSTEM_PROMPT,
+                response_format=ToolStrategy(RecommendationSet),
             )
             result = agent.invoke(
                 {"messages": [{"role": "user", "content": f"I liked: {liked}"}]}
             )
         except LLMConfigError:
             raise
-        except ModelError as exc:
+        except Exception as exc:  # noqa: BLE001 — translate any provider error uniformly.
+            # Not just ModelError — see ask_agent.py's identical clause for why.
             raise LLMUnavailableError(
                 f"The model is currently unavailable ({type(exc).__name__}): {exc}"
             ) from exc

@@ -10,27 +10,91 @@
 <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
+<!-- Dark-mode backdrop: a quiet, looping dawn-lake shot behind the glass UI.
+     Light mode keeps the original blob gradient instead — a video reads as
+     texture on a translucent dark surface, not through an opaque warm-cream
+     one. See styles.css for which one each theme actually shows. -->
+<video class="stage-video" autoplay muted loop playsinline aria-hidden="true"
+  src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260826_124724_bc041163-d651-425f-aea3-2acc1efc2c96.mp4"></video>
+<div class="stage-scrim" aria-hidden="true"></div>
+<div class="bg-scene" aria-hidden="true">
+  <span class="blob blob-a"></span>
+  <span class="blob blob-b"></span>
+  <span class="blob blob-c"></span>
+  <span class="blob blob-d"></span>
+</div>
+
 <div class="shell">
   <header class="top">
-    <div class="wordmark">book<span>marked</span></div>
+    <div class="wordmark">
+      <svg class="wordmark-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 4.5C4 3.67 4.67 3 5.5 3H11a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5.5A1.5 1.5 0 0 1 4 19.5v-15Z" fill="currentColor" opacity=".18"/>
+        <path d="M20 4.5c0-.83-.67-1.5-1.5-1.5H13a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h5.5a1.5 1.5 0 0 0 1.5-1.5v-15Z" fill="currentColor" opacity=".32"/>
+        <path d="M12 4v16M4 4.5C4 3.67 4.67 3 5.5 3H11a1 1 0 0 1 1 1M20 4.5c0-.83-.67-1.5-1.5-1.5H13a1 1 0 0 0-1 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      book<span>marked</span>
+    </div>
     <nav class="tabs" id="tabsNav">
       <span class="tab-indicator" id="tabIndicator"></span>
-      <button class="active" data-view="ask">Ask</button>
-      <button data-view="recommend">Recommend</button>
-      <button data-view="write">Write</button>
-      <button data-view="graph">Graph</button>
+      <button class="active" data-view="ask">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5C4 4.67 4.67 4 5.5 4h13c.83 0 1.5.67 1.5 1.5v10c0 .83-.67 1.5-1.5 1.5H9l-4 3.5v-3.5H5.5C4.67 17 4 16.33 4 15.5v-10Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 9h8M8 12.5h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span>Ask</span>
+      </button>
+      <button data-view="recommend">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5l1.6 4.2 4.4.4-3.4 2.9 1 4.3-3.6-2.3-3.6 2.3 1-4.3-3.4-2.9 4.4-.4L12 3.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M19 15.5l.7 1.8 1.8.2-1.4 1.2.4 1.8-1.5-1-1.5 1 .4-1.8-1.4-1.2 1.8-.2.7-1.8Z" fill="currentColor"/></svg>
+        <span>Recommend</span>
+      </button>
+      <button data-view="write">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M16.5 3.5a1.9 1.9 0 0 1 2.7 2.7L8 17.4l-3.7.9.9-3.7L16.5 3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14.5 5.5l3.3 3.3" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>Write</span>
+      </button>
+      <button data-view="graph">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="7" r="2.1" stroke="currentColor" stroke-width="1.4"/><circle cx="18" cy="7" r="2.1" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="18" r="2.1" stroke="currentColor" stroke-width="1.4"/><path d="M7.8 8.3 10.4 16M16.2 8.3 13.6 16M8.1 7h7.8" stroke="currentColor" stroke-width="1.3"/></svg>
+        <span>Graph</span>
+      </button>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6"/><path d="M12 2.5v2.2M12 19.3v2.2M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.4 19.6 6 18M18 6l1.6-1.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M20 14.2A8.5 8.5 0 1 1 9.8 4a6.7 6.7 0 0 0 10.2 10.2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    </button>
   </header>
 
   <main>
     <!-- ASK VIEW -->
     <section class="view active" id="view-ask">
-      <p class="lede">Ask anything across what you've read. Answers are grounded in your own library, with the source noted underneath.</p>
+      <h1 class="hero-headline">Ask anything across what you've read.</h1>
+      <p class="lede">Answers are grounded in your own library, with the source noted underneath.</p>
+
       <div class="narrow" id="askThread"></div>
-      <div class="askbar">
-        <input id="askInput" type="text" placeholder="Ask your library something…" autocomplete="off">
-        <button id="askButton">Ask</button>
-      </div>
+
+      <form class="composer" id="askComposer" onsubmit="return false">
+        <input id="askInput" class="composer-input" type="text" placeholder="Ask your library something…" autocomplete="off">
+        <div class="composer-tools">
+          <div class="composer-chips">
+            <div class="tool-chip tool-chip-select">
+              <label for="askBook" class="sr-only">Scope</label>
+              <select id="askBook">
+                <option value="">All books</option>
+              </select>
+            </div>
+            <div class="tool-chip tool-chip-position" id="askPositionWrap" hidden>
+              <label for="askPosition" class="sr-only">Your position</label>
+              <span>Ch.</span>
+              <input type="number" id="askPosition" min="1" value="1">
+              <span class="dim" id="askPositionMax"></span>
+            </div>
+          </div>
+          <div class="composer-right">
+            <span class="model-badge" id="modelBadge"></span>
+            <button type="button" class="composer-send" id="askButton" aria-label="Ask your library">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+        <p class="scopenote" id="askScopeNote" hidden>
+          Answers are bounded to what you've read so far in this book — nothing past your position can appear, and the agent won't reach for the web to fill the gap either.
+        </p>
+      </form>
     </section>
 
     <!-- RECOMMEND VIEW -->
@@ -50,7 +114,8 @@
 
     <!-- WRITE VIEW -->
     <section class="view" id="view-write">
-      <p class="lede">Give it a topic — it drafts an outline grounded in your library and current articles, ready for your next post.</p>
+      <p class="lede" id="writeLede">Give it a topic — it drafts an outline grounded in your library and current articles, ready for your next post.</p>
+      <div class="categorybar" id="categoryBar"></div>
       <div class="topicbar">
         <input id="topicInput" type="text" placeholder="Topic for your next post…" value="Why agentic AI needs guardrails" autocomplete="off">
         <button id="outlineButton">Draft outline</button>
@@ -59,8 +124,27 @@
       <div class="manuscript" id="manuscript">
         <h2 id="mTitle"></h2>
         <div class="rule"></div>
+        <div class="manuscript-meta" id="mMeta" hidden></div>
         <ol id="mOutline"></ol>
         <div class="footnotes" id="mFootnotes"></div>
+        <div class="manuscript-actions">
+          <button class="piece-btn" id="pieceButton">Write the full piece →</button>
+          <button class="ghost-btn" id="downloadDraftButton">⬇ Download</button>
+          <button class="ghost-btn" id="clearDraftButton">✕ Clear</button>
+        </div>
+      </div>
+
+      <div class="piece" id="piece">
+        <div class="piece-label">Final piece</div>
+        <h2 id="pieceTitle"></h2>
+        <div class="rule" id="pieceRule"></div>
+        <div class="piece-body" id="pieceBody"></div>
+        <div class="footnotes" id="pieceFootnotes"></div>
+        <div class="manuscript-actions">
+          <button class="rewrite-piece-btn" id="rewritePieceButton">↻ Rewrite this piece</button>
+          <button class="ghost-btn" id="downloadPieceButton">⬇ Download</button>
+          <button class="ghost-btn" id="clearPieceButton">✕ Clear</button>
+        </div>
       </div>
     </section>
 
@@ -87,8 +171,8 @@
     </section>
 
     <footer class="hint" id="footerHint">
-      Ask runs against your real library. Recommend and Write return demo data until
-      build-order steps 3 and 6 land — anything placeholder is badged.
+      Every tab is backed by a real agent. Repeated identical questions are served
+      from cache (⚡) rather than re-run — see the meta line under an answer.
     </footer>
   </main>
 </div>

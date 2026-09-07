@@ -44,11 +44,59 @@ LLM_PROVIDER = os.getenv("LLM_PROVIDER", "gemini").lower()
 _DEFAULT_MODELS = {
     "gemini": {"answer": "gemini-flash-lite-latest", "extraction": "gemini-flash-lite-latest"},
     "anthropic": {"answer": "claude-opus-5", "extraction": "claude-opus-5"},
+    # Added as an escape hatch for Gemini free-tier degradation — different
+    # infra, so a Gemini outage doesn't take this down too. In practice it
+    # turned out to have its own tradeoffs, not a clean win:
+    #  - Intermittent malformed tool calls (~1-in-4 in testing) — the model
+    #    invented a generic {cursor, id} shape instead of the tool's real
+    #    {query} schema.
+    #  - Combining `tools` with `response_format` (Recommend, Write) hit a
+    #    hard 400 on Groq specifically ("json mode cannot be combined with
+    #    tool/function calling") — fixed by forcing a tool-call-based
+    #    structured-output strategy instead of letting create_agent
+    #    auto-select one; see the ToolStrategy usage in recommend_agent.py /
+    #    write_agent.py.
+    #  - The free "on_demand" tier caps at 8000 tokens/minute *per request*,
+    #    not just cumulatively — Recommend's request (system prompt + two
+    #    tool schemas + retrieved chunks + its output schema) exceeded that
+    #    on its own, confirmed on both gpt-oss-120b and the smaller 20b
+    #    variant, with zero other usage in the window. Not a timing issue —
+    #    no amount of waiting fixes a single request that's too large.
+    #    Practically, this means Recommend does not work on Groq's free tier
+    #    at all right now; Write is close to the same ceiling depending on
+    #    how much gets retrieved; Ask (one tool, no output schema) is the
+    #    one most likely to actually fit.
+    # Gemini stays the default. This is a documented option, not a proven
+    # upgrade — flip LLM_PROVIDER to try it, but don't assume it's more
+    # reliable without re-checking, and expect Recommend specifically to fail.
+    # `llama-3.3-70b-versatile` (an earlier default here) no longer exists in
+    # Groq's catalog at all — reconfirmed with `check_llm --list` before
+    # picking this one, same stale-model-name risk as Gemini's dated names.
+    "groq": {"answer": "openai/gpt-oss-120b", "extraction": "openai/gpt-oss-120b"},
 }
 _defaults = _DEFAULT_MODELS.get(LLM_PROVIDER, _DEFAULT_MODELS["gemini"])
 
 ANSWER_MODEL = os.getenv("ANSWER_MODEL") or _defaults["answer"]
 EXTRACTION_MODEL = os.getenv("EXTRACTION_MODEL") or _defaults["extraction"]
+
+# Per-call timeout and retry count for the interactive path (Ask, Recommend,
+# Write — agent/model.py's get_chat_model()). Worst case per call is roughly
+# MODEL_TIMEOUT_S * (MODEL_MAX_RETRIES + 1) — an agent run can chain several
+# calls (tool use, then a final answer), so this compounds. Lower these when a
+# provider is visibly degraded and you'd rather fail fast than wait out a slow
+# response that might still succeed; raise them back once it recovers.
+MODEL_TIMEOUT_S = int(os.getenv("MODEL_TIMEOUT_S", "12"))
+MODEL_MAX_RETRIES = int(os.getenv("MODEL_MAX_RETRIES", "1"))
+
+# Extraction (get_extraction_model()) is a separate, longer budget — it's an
+# offline background job (NFR6 explicitly allows this to be slow), not a user
+# waiting on a chat reply, and it sends a whole book's text in one call, which
+# genuinely takes longer to process than an interactive turn. Sharing the
+# interactive timeout here cut extraction off mid-generation on some books —
+# smaller books failed while a bigger one succeeded, which only makes sense if
+# the clock was the constraint, not the provider being down.
+EXTRACTION_TIMEOUT_S = int(os.getenv("EXTRACTION_TIMEOUT_S", "90"))
+EXTRACTION_MAX_RETRIES = int(os.getenv("EXTRACTION_MAX_RETRIES", "2"))
 
 # --- Retrieval -----------------------------------------------------------
 TOP_K = int(os.getenv("TOP_K", "6"))

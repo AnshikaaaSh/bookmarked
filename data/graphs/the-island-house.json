@@ -1,0 +1,216 @@
+{
+  "nodes": [
+    {
+      "id": "courtney-hendricks",
+      "label": "Courtney Hendricks",
+      "introduced_at": 8,
+      "main": true
+    },
+    {
+      "id": "robin-vickerey",
+      "label": "Robin Vickerey",
+      "introduced_at": 10,
+      "main": true
+    },
+    {
+      "id": "susanna-vickerey",
+      "label": "Susanna Vickerey",
+      "introduced_at": 11,
+      "main": false
+    },
+    {
+      "id": "alastair-vickerey",
+      "label": "Alastair Vickerey",
+      "introduced_at": 11,
+      "main": false
+    },
+    {
+      "id": "monty-blackhorse",
+      "label": "Monty Blackhorse",
+      "introduced_at": 15,
+      "main": false
+    },
+    {
+      "id": "donnie-hendricks",
+      "label": "Donnie Hendricks",
+      "introduced_at": 13,
+      "main": false
+    },
+    {
+      "id": "henry-vickerey",
+      "label": "Henry Vickerey",
+      "introduced_at": 28,
+      "main": false
+    },
+    {
+      "id": "valerie-whitman",
+      "label": "Valerie Whitman",
+      "introduced_at": 28,
+      "main": false
+    },
+    {
+      "id": "james-vickerey",
+      "label": "James Vickerey",
+      "introduced_at": 29,
+      "main": false
+    },
+    {
+      "id": "christabel-eliot",
+      "label": "Christabel Eliot",
+      "introduced_at": 29,
+      "main": false
+    },
+    {
+      "id": "quinn-eliot",
+      "label": "Quinn Eliot",
+      "introduced_at": 29,
+      "main": false
+    },
+    {
+      "id": "iris-vickerey",
+      "label": "Iris Vickerey",
+      "introduced_at": 29,
+      "main": false
+    },
+    {
+      "id": "jacob-barnes",
+      "label": "Jacob Barnes",
+      "introduced_at": 35,
+      "main": false
+    },
+    {
+      "id": "pearl-schwartz",
+      "label": "Pearl Schwartz",
+      "introduced_at": 68,
+      "main": false
+    },
+    {
+      "id": "lisa",
+      "label": "Lisa",
+      "introduced_at": 88,
+      "main": false
+    },
+    {
+      "id": "callum-findlay",
+      "label": "Callum Findlay",
+      "introduced_at": 115,
+      "main": false
+    },
+    {
+      "id": "julian-moreau",
+      "label": "Julian Moreau",
+      "introduced_at": 232,
+      "main": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "courtney-hendricks",
+      "target": "robin-vickerey",
+      "label": "college roommate and best friend",
+      "introduced_at": 10
+    },
+    {
+      "source": "courtney-hendricks",
+      "target": "monty-blackhorse",
+      "label": "childhood friend",
+      "introduced_at": 15
+    },
+    {
+      "source": "courtney-hendricks",
+      "target": "donnie-hendricks",
+      "label": "sister",
+      "introduced_at": 13
+    },
+    {
+      "source": "courtney-hendricks",
+      "target": "james-vickerey",
+      "label": "romantic interest and partner",
+      "introduced_at": 63
+    },
+    {
+      "source": "robin-vickerey",
+      "target": "susanna-vickerey",
+      "label": "daughter",
+      "introduced_at": 11
+    },
+    {
+      "source": "robin-vickerey",
+      "target": "alastair-vickerey",
+      "label": "daughter",
+      "introduced_at": 25
+    },
+    {
+      "source": "robin-vickerey",
+      "target": "henry-vickerey",
+      "label": "sister",
+      "introduced_at": 25
+    },
+    {
+      "source": "robin-vickerey",
+      "target": "james-vickerey",
+      "label": "sister",
+      "introduced_at": 26
+    },
+    {
+      "source": "robin-vickerey",
+      "target": "iris-vickerey",
+      "label": "sister",
+      "introduced_at": 25
+    },
+    {
+      "source": "robin-vickerey",
+      "target": "quinn-eliot",
+      "label": "secret romantic partner",
+      "introduced_at": 147
+    },
+    {
+      "source": "henry-vickerey",
+      "target": "valerie-whitman",
+      "label": "romantic partner",
+      "introduced_at": 28
+    },
+    {
+      "source": "henry-vickerey",
+      "target": "jacob-barnes",
+      "label": "best friend",
+      "introduced_at": 35
+    },
+    {
+      "source": "henry-vickerey",
+      "target": "lisa",
+      "label": "romantic partner",
+      "introduced_at": 88
+    },
+    {
+      "source": "james-vickerey",
+      "target": "christabel-eliot",
+      "label": "childhood friend and former romantic partner",
+      "introduced_at": 29
+    },
+    {
+      "source": "james-vickerey",
+      "target": "callum-findlay",
+      "label": "best friend",
+      "introduced_at": 115
+    },
+    {
+      "source": "christabel-eliot",
+      "target": "quinn-eliot",
+      "label": "father",
+      "introduced_at": 29
+    },
+    {
+      "source": "christabel-eliot",
+      "target": "julian-moreau",
+      "label": "fiancé",
+      "introduced_at": 232
+    },
+    {
+      "source": "iris-vickerey",
+      "target": "pearl-schwartz",
+      "label": "best friend",
+      "introduced_at": 68
+    }
+  ]
+}

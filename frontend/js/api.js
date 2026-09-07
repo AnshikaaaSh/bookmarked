@@ -37,14 +37,28 @@ const postJSON = (path, body) =>
     body: JSON.stringify(body),
   });
 
+const putJSON = (path, body) =>
+  request(path, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
 export const api = {
   health: () => request("/api/health"),
   sources: () => request("/api/sources"),
   ask: (question, opts = {}) => postJSON("/api/ask", { question, ...opts }),
   recommend: (liked) => postJSON("/api/recommend", { liked }),
-  outline: (topic) => postJSON("/api/write/outline", { topic }),
+  outline: (topic, category = "general") => postJSON("/api/write/outline", { topic, category }),
+  piece: (payload) => postJSON("/api/write/piece", payload),
+  rewrite: (payload) => postJSON("/api/write/rewrite", payload),
   graphs: () => request("/api/graphs"),
-  graph: (sourceId, position) => request(`/api/graph/${encodeURIComponent(sourceId)}?position=${position}`),
+  // Omit position to let the backend fall back to the reader's saved progress.
+  graph: (sourceId, position) =>
+    request(`/api/graph/${encodeURIComponent(sourceId)}${position != null ? `?position=${position}` : ""}`),
+  progress: () => request("/api/progress"),
+  setProgress: (sourceId, position) =>
+    putJSON(`/api/progress/${encodeURIComponent(sourceId)}`, { position }),
 };
 
 export { ApiError };

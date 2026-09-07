@@ -17,11 +17,7 @@ from ..config import ANSWER_MODEL, EXTRACTION_MODEL, LLM_PROVIDER
 from ..llm import LLMConfigError, complete
 
 
-def list_models() -> int:
-    if LLM_PROVIDER != "gemini":
-        print(f"--list is only implemented for gemini (LLM_PROVIDER={LLM_PROVIDER}).")
-        return 1
-
+def _list_gemini() -> int:
     from google import genai
 
     key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
@@ -38,6 +34,31 @@ def list_models() -> int:
     return 0
 
 
+def _list_groq() -> int:
+    import groq
+
+    key = os.getenv("GROQ_API_KEY")
+    if not key:
+        print("GROQ_API_KEY is not set — add it to .env first.")
+        return 1
+
+    client = groq.Groq(api_key=key)
+    print("Models your key can call:\n")
+    for model in client.models.list().data:
+        print(f"  {model.id}")
+    return 0
+
+
+def list_models() -> int:
+    if LLM_PROVIDER == "gemini":
+        return _list_gemini()
+    if LLM_PROVIDER == "groq":
+        return _list_groq()
+    print(f"--list isn't implemented for {LLM_PROVIDER} — Anthropic doesn't expose a "
+          f"model-listing endpoint the same way; see console.anthropic.com for its catalog.")
+    return 1
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Check the LLM setup.")
     parser.add_argument("--list", action="store_true", help="List available models.")
@@ -47,7 +68,11 @@ def main(argv: list[str] | None = None) -> int:
     print(f"answer model     {ANSWER_MODEL}")
     print(f"extraction model {EXTRACTION_MODEL}")
 
-    key_names = {"gemini": ("GEMINI_API_KEY", "GOOGLE_API_KEY"), "anthropic": ("ANTHROPIC_API_KEY",)}
+    key_names = {
+        "gemini": ("GEMINI_API_KEY", "GOOGLE_API_KEY"),
+        "anthropic": ("ANTHROPIC_API_KEY",),
+        "groq": ("GROQ_API_KEY",),
+    }
     found = [n for n in key_names.get(LLM_PROVIDER, ()) if os.getenv(n)]
     print(f"api key          {'set via ' + found[0] if found else 'NOT SET'}\n")
 

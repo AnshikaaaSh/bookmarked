@@ -17,7 +17,6 @@ from __future__ import annotations
 import re
 from dataclasses import asdict, dataclass, field
 
-from langchain_core.exceptions import ModelError
 from langchain_core.messages import ToolMessage
 
 from ..config import TOP_K
@@ -174,7 +173,13 @@ def ask(
             result = agent.invoke({"messages": [{"role": "user", "content": question}]})
         except LLMConfigError:
             raise
-        except ModelError as exc:
+        except Exception as exc:  # noqa: BLE001 — translate any provider error uniformly.
+            # Not just ModelError: a request that hits agent/model.py's timeout
+            # raises httpx.ConnectTimeout/ReadTimeout, which ModelError alone
+            # doesn't cover — and that's now a reachable path since a timeout
+            # is configured at all. This is the outermost boundary before the
+            # HTTP layer, so anything unexpected here should become a clean
+            # 503, never a raw traceback.
             raise LLMUnavailableError(
                 f"The model is currently unavailable ({type(exc).__name__}): {exc}"
             ) from exc

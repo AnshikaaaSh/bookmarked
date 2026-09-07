@@ -196,6 +196,24 @@ seen position rather than overwriting, so extracting through chapter 20 after
 already extracting through chapter 10 adds new characters without disturbing
 ones already placed.
 
+## Reading progress
+
+FR7 asks for tracked reading progress per book. This is what actually makes the
+spoiler-safe Ask flow reachable at all: for a while the backend fully supported
+`source_id`/`position` scoping, but the Ask tab's UI never exposed a way to set
+either — only the Graph tab's slider did, and that reset to chapter 1 every
+reload since nothing was persisted.
+
+Now `data/progress.json` holds one position per book
+([`store/progress_store.py`](backend/store/progress_store.py)), and both tabs
+read/write the same value: pick a book in Ask, and its saved position (or 1, if
+none yet) pre-fills the position field; move the Graph slider for that book and
+Ask's field reflects it next time you open that book there, and vice versa. Set
+it in Ask and ask a spoiler-sensitive question — the same position-filtered
+retrieval and web-search lockout from *How the spoiler safety works* now apply,
+because the `position` reaching `ask()` is the persisted one, not a value that
+only ever lived in one tab's local state.
+
 ## Evaluation
 
 ```bash
@@ -230,8 +248,10 @@ backend/
   main.py              FastAPI app + routes (also serves the frontend)
   schemas.py           request models
   trace.py             JSONL agent traces -> logs/traces.jsonl
+  cache.py             file-based response cache (NFR2)
   ingestion/           loaders (chapter detection) -> chunker -> pipeline
-  store/               vector_store.py (Chroma), graph_store.py (NetworkX)
+  store/               vector_store.py (Chroma), graph_store.py (NetworkX),
+                        progress_store.py (reading position, FR7)
   llm/                 raw single-completion path (providers.py) — used where
                         no tool-calling is needed, e.g. scripts/check_llm.py
   tools/               web_search.py — Tavily client, shared by the agents
@@ -247,6 +267,7 @@ backend/
     extract_graph.py    run character extraction for one book
     eval.py             run the eval harness (data/eval/cases.json)
     check_llm.py        verify the model/API-key setup
+    clear_cache.py      bust the response cache
 frontend/
   index.html, styles.css, js/{api,app}.js
 data/
@@ -254,6 +275,8 @@ data/
   samples/                   format examples
   graphs/                    one JSON character graph per book
   eval/cases.json            eval harness test cases
+  progress.json               reading position per book (gitignored)
+  cache/                       cached responses (gitignored)
 ```
 
 ## Build status
@@ -266,6 +289,7 @@ Every feature in the plan is real — nothing left stubbed.
 | Recommendations (2.5) | `POST /api/recommend` | Checks the library for notes on the liked book first, then searches the web for candidates; structured `{title, author, reason}` output |
 | Writing assist (2.4) | `POST /api/write/outline` | Same pattern — library + web, structured outline + sources |
 | Character graph (2.6) | `GET /api/graph/{id}` | Extraction is a separate offline step — see below — not automatic on ingest |
+| Reading progress (FR7) | `GET/PUT /api/progress/{id}` | Persisted per book, shared between the Ask and Graph tabs — see below |
 | Library listing | `GET /api/sources` | |
 
 Run `python -m backend.scripts.extract_graph <source_id>` per book you want
@@ -280,7 +304,7 @@ generation, which is the only part that can cost anything.
 
 ```bash
 # .env
-LLM_PROVIDER=gemini        # gemini (free tier) | anthropic
+LLM_PROVIDER=gemini        # gemini (free tier) | groq (free tier) | anthropic
 GEMINI_API_KEY=...         # free key: https://aistudio.google.com/apikey
 TAVILY_API_KEY=...         # free key (1000/month): https://app.tavily.com
 ```
@@ -295,6 +319,7 @@ python -m backend.scripts.check_llm --list   # models your key can use
 | Provider | Default answer model | Notes |
 |---|---|---|
 | `gemini` | `gemini-flash-lite-latest` | Free tier. `gemini-flash-latest` looks like the obvious default but currently resolves to a model with a **20-requests/day** free quota — confirmed by hitting it during development. The lite variant handled sustained testing fine; bump `ANSWER_MODEL` if you have paid quota. |
+| `groq` | `openai/gpt-oss-120b` | Free tier, added as a Gemini fallback — tested and **not a clean win**. The free "on_demand" tier caps at 8000 tokens/minute *per request*: Recommend's request (system prompt + two tool schemas + retrieved chunks + its output schema) exceeds that on its own, on both the 120b and 20b models, regardless of timing — not a rate limit that clears, a request that's too big. Also hit an intermittent malformed tool call in testing, and combining `tools` with `response_format` needs `ToolStrategy` explicitly (Groq 400s on the auto-selected native-JSON-mode path — see `agent/write_agent.py`). Ask is the most likely feature to actually fit under the cap. |
 | `anthropic` | `claude-opus-5` | Paid (~$0.01/question). Best quality. |
 
 Override either model with `ANSWER_MODEL` / `EXTRACTION_MODEL`. `EXTRACTION_MODEL`
@@ -308,6 +333,30 @@ uses LangChain chat model wrappers instead ([backend/agent/model.py](backend/age
 because `create_agent` requires one. `LLM_PROVIDER`/`ANSWER_MODEL` in `.env` drive
 both paths identically — provider selection is still one flag for the whole app.
 
+## Response caching
+
+Ask, Recommend, and Write each cache their response for 24h
+([`backend/cache.py`](backend/cache.py)), keyed on the request plus which model
+answered it — NFR2's "cache repeated queries... to control cost." An identical
+repeated question skips the LLM call entirely; the response carries
+`"cached": true` so you can tell (the UI shows a ⚡ next to it).
+
+One JSON file per cache entry under `data/cache/<namespace>/`, matching the
+project's existing pattern for small persistent state (progress, graphs) —
+deliberately not Redis or an in-memory cache, since a personal single-user app
+restarts occasionally and a cache that doesn't survive that isn't earning its
+keep. TTL-based rather than invalidated by library changes: the tradeoff NFR2
+actually asks for is cost control, not perfect freshness.
+
+```bash
+python -m backend.scripts.clear_cache          # everything
+python -m backend.scripts.clear_cache ask      # just one namespace
+```
+
+Run this after re-ingesting a book whose answers you know changed, or if you
+want a genuinely fresh web search on something you already asked about today
+— TTL alone won't catch either case.
+
 ## Traces
 
 Every Ask, Recommend, Write, and extraction run writes one line to
@@ -320,7 +369,11 @@ tail -1 logs/traces.jsonl | python3 -m json.tool
 
 ## Next up
 
-The build order in the plan is complete. What's left is content, not code:
+Every FR/NFR in the plan is now built, including the two gaps found after the
+initial build-order pass: the Ask tab not actually exposing book/position
+scoping (fixed — see *Reading progress*), and NFR2's caching requirement,
+which had been skipped entirely (fixed — see *Response caching*). What's left
+is content and hardening, not missing features:
 
 - Run `extract_graph.py` on more of your ingested books — only two have a
   character graph so far.
@@ -330,3 +383,8 @@ The build order in the plan is complete. What's left is content, not code:
 - Grow `data/eval/cases.json` past 15 cases as you find real questions that
   trip up an answer — that's what turns the harness from a one-time check into
   an actual regression suite.
+- NFR6's latency target (~10s for simple queries) depends heavily on Gemini's
+  free-tier responsiveness, which has been genuinely degraded more than once
+  during development — `agent/model.py`'s bounded timeout/retries keep a bad
+  day from hanging or corrupting output, but a slow provider is still slow.
+  Worth revisiting if you move to paid quota or a different provider.

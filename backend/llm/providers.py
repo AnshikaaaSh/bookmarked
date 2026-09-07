@@ -6,8 +6,10 @@ writing one function with this shape and registering it in PROVIDERS:
 
     def _complete(system: str, user: str, model: str, max_tokens: int) -> str
 
-Currently implemented: gemini (free tier) and anthropic. Groq, OpenRouter and
-Ollama all speak an OpenAI-compatible API, so each is a similar small function.
+Currently implemented: gemini (free tier), anthropic, and groq (free tier,
+genuinely separate infra from Google — added as an escape hatch when Gemini's
+free tier is degraded). OpenRouter and Ollama both speak an OpenAI-compatible
+API too, so each would be a similar small function.
 """
 
 from __future__ import annotations
@@ -129,7 +131,54 @@ def anthropic_complete(system: str, user: str, model: str, max_tokens: int) -> s
     return "\n".join(b.text for b in response.content if b.type == "text").strip()
 
 
+# --- Groq -----------------------------------------------------------------
+
+
+def groq_complete(system: str, user: str, model: str, max_tokens: int) -> str:
+    try:
+        import groq
+    except ImportError as exc:
+        raise LLMConfigError("groq is not installed: pip install groq") from exc
+
+    key = os.getenv("GROQ_API_KEY")
+    if not key:
+        raise LLMConfigError(
+            "GROQ_API_KEY is not set. Get a free key at https://console.groq.com/keys "
+            "and put it in .env"
+        )
+
+    client = groq.Groq(api_key=key)
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            max_tokens=max_tokens,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+        )
+    except groq.AuthenticationError as exc:
+        raise LLMConfigError(f"Groq rejected the API key: {exc}") from exc
+    except groq.NotFoundError as exc:
+        raise LLMConfigError(
+            f"Groq model '{model}' not found. Run `python -m backend.scripts.check_llm "
+            f"--list` to see what your key can call — Groq's catalog changes over time."
+        ) from exc
+    except groq.RateLimitError as exc:
+        raise LLMConfigError(
+            "Groq free-tier rate limit hit. Wait a minute and try again."
+        ) from exc
+    except (groq.APIConnectionError, groq.APITimeoutError, groq.InternalServerError) as exc:
+        raise LLMUnavailableError(f"Groq is currently unavailable: {exc}") from exc
+
+    text = response.choices[0].message.content
+    if not text:
+        raise RuntimeError(f"Groq returned no text. Full response: {response}")
+    return text.strip()
+
+
 PROVIDERS = {
     "gemini": gemini_complete,
     "anthropic": anthropic_complete,
+    "groq": groq_complete,
 }

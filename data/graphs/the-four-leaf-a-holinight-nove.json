@@ -1,0 +1,42 @@
+{
+  "nodes": [
+    {
+      "id": "samantha",
+      "label": "Samantha",
+      "introduced_at": 7,
+      "main": true
+    },
+    {
+      "id": "willow",
+      "label": "Willow",
+      "introduced_at": 7,
+      "main": false
+    },
+    {
+      "id": "adrian",
+      "label": "Adrian Stokes",
+      "introduced_at": 8,
+      "main": true
+    }
+  ],
+  "edges": [
+    {
+      "source": "samantha",
+      "target": "willow",
+      "label": "twin sister",
+      "introduced_at": 7
+    },
+    {
+      "source": "samantha",
+      "target": "adrian",
+      "label": "childhood friend turned romantic partner",
+      "introduced_at": 8
+    },
+    {
+      "source": "willow",
+      "target": "adrian",
+      "label": "childhood friend",
+      "introduced_at": 9
+    }
+  ]
+}
